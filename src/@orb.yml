@@ -4,9 +4,13 @@ description: >
   Continue a pipeline based on paths of changed files.
   This can be useful in a monorepo setup where one may want to trigger different workflows
   based on which module(s) in the repo has changed.
+  This version of the orb also supports providing a reference tag. This will allow building
+  based on this tag reference to the previos commit of the same tag matching the reference.
+  This will allow you to not lose commits between the tags as which normally happens on the
+  original version of this orb.
   This orb does not support server at this time.
   This is a fork of the original adding support for mono-repos using a trunk based flow with 
-  either tagged or long lived branch release styles.
+  a tagged release style.
 display:
   home_url: "https://circleci.com/developer/orbs/orb/socialindoor/si-path-filtering-orb"
   source_url: "https://github.com/Sirafe/si-path-filtering-orb"

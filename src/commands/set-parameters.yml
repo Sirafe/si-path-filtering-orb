@@ -13,7 +13,7 @@ parameters:
     type: string
     default: ""
     description: >
-      Regular expression tag reference for retrieving the tagged revision 
+      Regular expression tag reference for retrieving the tagged revision
       to compare the current one against for the purpose of determining changed files.
   mapping:
     type: string

@@ -39,7 +39,7 @@ workflows:
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
-          orb-name: circleci/path-filtering
+          orb-name: sipub/si-path-filtering-orb
           vcs-type: << pipeline.project.type >>
           pub-type: production
           requires:

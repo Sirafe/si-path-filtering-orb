@@ -8,8 +8,8 @@ description: >
   This is a fork of the original adding support for mono-repos using a trunk based flow with 
   either tagged or long lived branch release styles.
 display:
-  home_url: "https://circleci.com/docs/2.0/dynamic-config"
-  source_url: "https://github.com/CircleCI-Public/path-filtering-orb"
+  home_url: "https://circleci.com/developer/orbs/orb/socialindoor/si-path-filtering-orb"
+  source_url: "https://github.com/Sirafe/si-path-filtering-orb"
 
 orbs:
   continuation: circleci/continuation@0.2.0

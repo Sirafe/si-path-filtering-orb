@@ -1,0 +1,48 @@
+description: >
+  Generates a set of pipeline parameters from `mapping` at
+  `output-path`. Python is required to run this command.
+
+parameters:
+  base-revision:
+    type: string
+    default: "main"
+    description: >
+      The revision to compare the current one against for the purpose
+      of determining changed files.
+  tag-reference:
+    type: string
+    default: ""
+    description: >
+      Regular expression tag reference for retrieving the tagged revision 
+      to compare the current one against for the purpose of determining changed files.
+  mapping:
+    type: string
+    default: ""
+    description: >
+      Mapping of path regular expressions to pipeline parameters and
+      values. One mapping per line, whitespace-delimited. If duplicate
+      parameter keys are found, the last matching pattern will apply.
+      String values must be double-quoted.
+  output-path:
+    type: string
+    default: "/tmp/pipeline-parameters.json"
+    description: >
+      Path to save the generated parameters to.
+  config-path:
+    type: string
+    default: ".circleci/continue_config.yml"
+    description: >
+      The location of the config to continue the pipeline with, please note that this parameter
+      will be ignored if the user passes the config file per mapping in the mapping parameter
+
+steps:
+  - run:
+      name: Set parameters
+      environment:
+        BASE_REVISION: << parameters.base-revision >>
+        TAG_REFERENCE: << parameters.tag-reference >>
+        MAPPING: << parameters.mapping >>
+        OUTPUT_PATH: << parameters.output-path >>
+        CONFIG_PATH: << parameters.config-path >>
+        CREATE_PIPELINE_SCRIPT: <<include(scripts/create-parameters.py)>>
+      command: <<include(scripts/create-parameters.sh)>>

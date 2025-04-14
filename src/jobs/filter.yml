@@ -1,0 +1,96 @@
+description: >
+  Continues a pipeline in the `setup` state based with static config
+  and a set of pipeline parameters based on the changes in this push.
+
+  The mapping should be a set of items like so:
+  <path regular expression> <pipeline parameter> <value>
+  Multiple mappings can be supplied on separate lines.
+  If the regular expression matches any file changed between HEAD and
+  the base revision, the pipeline parameter will be set to the
+  supplied value for the setup workflow continuation. This way the
+  continuation config can be filtered to only perform relevant tasks.
+
+executor:
+  name: default
+  tag: << parameters.tag >>
+
+resource_class: << parameters.resource_class >>
+
+parameters:
+  base-revision:
+    type: string
+    default: "main"
+    description: >
+      The revision to compare the current one against for the purpose
+      of determining changed files.
+  tag-reference:
+    type: string
+    default: ""
+    description: >
+      Regular expression tag reference for retrieving the tagged revision 
+      to compare the current one against for the purpose of determining changed files.
+  mapping:
+    type: string
+    default: ""
+    description: >
+      Mapping of path regular expressions to pipeline parameters and
+      values. If the value is a file, then it will be loaded from the disk.
+      One mapping per line, whitespace-delimited. String values must be double-quoted.
+  config-path:
+    type: string
+    default: ".circleci/continue_config.yml"
+    description: >
+      The location of the config to continue the pipeline with, please note that this parameter
+      will be ignored if the user passes the config file per mapping in the mapping parameter
+  circleci_domain:
+    type: string
+    description: "The domain of the CircleCI installation - defaults to circleci.com. (Only necessary for CircleCI Server users)"
+    default: "circleci.com"
+  workspace_path:
+    type: string
+    description: "Path to attach the workspace to"
+    default: ""
+  output-path:
+    type: string
+    default: "/tmp/pipeline-parameters.json"
+    description: >
+      Path to save the generated parameters to.
+  resource_class:
+    type: string
+    description: "Resource class to use"
+    default: "small"
+  tag:
+    type: string
+    default: "3.8"
+    description: >
+      Pick a specific cimg/python image variant:
+      https://hub.docker.com/r/cimg/python/tags
+  circleci_ip_ranges:
+    description: Enables jobs to go through a set of well-defined IP address ranges.
+    type: boolean
+    default: false
+
+circleci_ip_ranges: << parameters.circleci_ip_ranges >>
+
+steps:
+  - checkout
+  - when:
+      condition:
+        not:
+          equal: ["", << parameters.workspace_path >>]
+      steps:
+        - attach_workspace:
+            at: << parameters.workspace_path >>
+  - set-parameters:
+      base-revision: << parameters.base-revision >>
+      tag-reference: << parameters.tag-reference >>
+      mapping: << parameters.mapping >>
+      output-path: << parameters.output-path >>
+      config-path: << parameters.config-path >>
+  - generate-config:
+      config-list-path: /tmp/filtered-config-list
+      generated-config-path: "/tmp/generated-config.yml"
+  - continuation/continue:
+      configuration_path: "/tmp/generated-config.yml"
+      parameters: << parameters.output-path >>
+      circleci_domain: << parameters.circleci_domain >>

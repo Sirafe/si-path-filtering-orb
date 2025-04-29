@@ -9,10 +9,10 @@ description: >
   This will allow you to not lose commits between the tags as which normally happens on the
   original version of this orb.
   This orb does not support server at this time.
-  This is a fork of the original adding support for mono-repos using a trunk based flow with 
+  This is a fork of the original adding support for mono-repos using a trunk based flow with
   a tagged release style.
 display:
-  home_url: "https://circleci.com/developer/orbs/orb/socialindoor/si-path-filtering-orb"
+  home_url: "https://circleci.com/developer/orbs/orb/sipub/si-path-filtering-orb"
   source_url: "https://github.com/Sirafe/si-path-filtering-orb"
 
 orbs:
